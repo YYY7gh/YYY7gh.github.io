@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Utility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1a0505, #2a0808);
+            z-index: -1;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            color: #ff3333;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+            margin-bottom: 1rem;
+        }
+
+        .discord-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #7289da;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(114, 137, 218, 0.4);
+        }
+
+        .draggable-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .draggable {
+            background: rgba(255, 51, 51, 0.1);
+            border: 2px solid #ff3333;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: move;
+            transition: transform 0.3s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .draggable img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .draggable:hover {
+            transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+        }
+
+        .faq {
+            margin-top: 4rem;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: #ff3333;
+        }
+
+        .faq-answer {
+            display: none;
+            margin-top: 1rem;
+            color: #ccc;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <canvas class="particles" id="particles"></canvas>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Roblox Utility</h1>
+            <a href="#" class="discord-btn">Join our Discord</a>
+        </header>
+
+        <div class="draggable-container">
+            <div class="draggable" draggable="true">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
+                <h3>Feature 1</h3>
+                <p>Advanced scripting capabilities</p>
+            </div>
+            <div class="draggable" draggable="true">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
+                <h3>Feature 2</h3>
+                <p>Real-time updates</p>
+            </div>
+            <div class="draggable" draggable="true">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
+                <h3>Feature 3</h3>
+                <p>Custom configurations</p>
+            </div>
+        </div>
+
+        <div class="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">How do I install the utility?</div>
+                <div class="faq-answer">Detailed installation instructions will be provided upon joining our Discord server.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is this safe to use?</div>
+                <div class="faq-answer">Yes, our utility is designed with security in mind and regularly updated.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What features are included?</div>
+                <div class="faq-answer">Our utility includes advanced scripting, real-time updates, and custom configurations.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particle background effect
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = '#ff3333';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (const particle of particles) {
+                particle.update();
+                particle.draw();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        // Draggable functionality
+        const draggables = document.querySelectorAll('.draggable');
+        
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                draggable.classList.add('dragging');
+            });
+
+            draggable.addEventListener('dragend', (e) => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        // FAQ functionality
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 3D effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            draggables.forEach(draggable => {
+                const rotateY = (clientX - centerX) / 50;
+                const rotateX = (centerY - clientY) / 50;
+                
+                draggable.style.transform = `
+                    perspective(1000px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                    translateZ(20px)
+                `;
+            });
+        });
+
+        // Responsive canvas resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
