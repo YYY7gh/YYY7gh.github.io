@@ -52,7 +52,11 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
         }
 
         .header-sticky {
@@ -280,6 +284,11 @@
             box-shadow: 0 15px 40px rgba(255, 51, 51, 0.6);
             background: rgba(255, 51, 51, 0.25);
         }
+        .perk-item span {
+            font-size: 2.2rem;
+            color: #ff3333;
+            margin-right: 1rem;
+        }
 
         .team-item .discord-link {
             color: #ff3333;
@@ -416,7 +425,9 @@
 <body>
     <div class="progress-bar"><div class="progress-fill"></div></div>
     <div class="background"></div>
-    <div class="particle-container" id="particle-container"></div>
+    <div class="particle-container" id="particle-container">
+        <canvas id="particle-canvas"></canvas>
+    </div>
 
     <header class="header-sticky">
         <div class="logo">xBin</div>
@@ -476,10 +487,10 @@
         <section class="perks-section">
             <h2>Exclusive Discord Perks</h2>
             <div class="perks-grid">
-                <div class="perk-item"><p>Early Feature Access</p></div>
-                <div class="perk-item"><p>Exclusive Scripts</p></div>
-                <div class="perk-item"><p>Live Support</p></div>
-                <div class="perk-item"><p>Team Events</p></div>
+                <div class="perk-item"><p><span>🎱</span>Early Feature Access</p></div>
+                <div class="perk-item"><p><span>✨</span>Exclusive Scripts</p></div>
+                <div class="perk-item"><p><span>🔱</span>Live Support</p></div>
+                <div class="perk-item"><p><span>🎉</span>Team Events</p></div>
             </div>
         </section>
 
@@ -504,95 +515,108 @@
         </div>
     </div>
 
-    <a href="https://discord.gg/feQSfhdDgc" class="floating-btn" target="_blank" rel="noopener">Join Discord Now</a>
+    <a href="https://discord.gg/feQSfhdDgc" class="floating-btn" target="_blank" rel="noopener">Join Discord</a>
     <button class="theme-toggle">☀️</button>
 
     <script>
-        // Enhanced Particle System with Trails
-        const particleContainer = document.getElementById('particle-container');
-        const particleCount = Math.min(250, Math.floor(window.innerWidth / 5));
+        // Optimized Canvas-Based Particle System
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        const particleCount = 100; // Reduced for performance
         const mouse = { x: null, y: null };
         const particles = [];
 
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
         class Particle {
             constructor() {
-                this.element = document.createElement('div');
-                this.isLightTheme = document.body.classList.contains('light-theme');
-                this.trail = [];
-                Object.assign(this.element.style, {
-                    position: 'absolute',
-                    width: '6px',
-                    height: '6px',
-                    background: this.isLightTheme ? 'radial-gradient(circle, rgba(0, 0, 0, 0.9), transparent)' : 'radial-gradient(circle, rgba(255, 51, 51, 0.9), transparent)',
-                    borderRadius: '50%',
-                    boxShadow: this.isLightTheme ? '0 0 12px rgba(0, 0, 0, 0.6)' : '0 0 12px rgba(255, 51, 51, 0.6)',
-                    willChange: 'transform, opacity',
-                    transition: 'transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease'
-                });
-                particleContainer.appendChild(this.element);
                 this.reset();
+                this.hue = Math.random() * 60 + 340; // Red to purple
+                this.isLightTheme = document.body.classList.contains('light-theme');
             }
 
             reset() {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 5 + 2;
-                this.speedX = Math.random() * 0.8 - 0.4;
-                this.speedY = Math.random() * 0.8 - 0.4;
-                this.opacity = Math.random() * 0.6 + 0.4;
+                this.baseSpeedX = Math.random() * 1 - 0.5;
+                this.baseSpeedY = Math.random() * 1 - 0.5;
+                this.speedX = this.baseSpeedX;
+                this.speedY = this.baseSpeedY;
+                this.opacity = Math.random() * 0.5 + 0.5;
                 this.lifespan = Math.random() * 400 + 200;
                 this.age = 0;
                 this.trail = [];
-                this.updatePosition();
             }
 
             update() {
                 this.age++;
-                if (this.age > this.lifespan) {
-                    this.reset();
-                }
+                if (this.age > this.lifespan) this.reset();
 
+                // Mouse interaction
                 if (mouse.x !== null && mouse.y !== null) {
                     const dx = this.x - mouse.x;
                     const dy = this.y - mouse.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-                    const maxDistance = 300;
+                    const maxDistance = 150;
 
                     if (distance < maxDistance) {
                         const force = (maxDistance - distance) / maxDistance;
-                        this.x += (dx / distance || 0) * force * 8;
-                        this.y += (dy / distance || 0) * force * 8;
-                        this.opacity = Math.min(1, this.opacity + force * 0.4);
-                        this.size = Math.min(8, this.size + force * 0.8);
+                        const angle = Math.atan2(dy, dx);
+                        this.speedX += Math.cos(angle) * force * 5;
+                        this.speedY += Math.sin(angle) * force * 5;
+                        this.opacity = Math.min(1, this.opacity + force * 0.2);
+                        this.size = Math.min(10, this.size + force * 0.5);
                     }
                 }
 
-                this.trail.push({ x: this.x, y: this.y, opacity: this.opacity * 0.5 });
-                if (this.trail.length > 10) this.trail.shift();
-
+                // Apply friction
+                this.speedX *= 0.98;
+                this.speedY *= 0.98;
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                this.x = (this.x > window.innerWidth) ? 0 : (this.x < 0) ? window.innerWidth : this.x;
-                this.y = (this.y > window.innerHeight) ? 0 : (this.y < 0) ? window.innerHeight : this.y;
+                // Bounce off edges
+                if (this.x > canvas.width) this.speedX = -Math.abs(this.baseSpeedX);
+                else if (this.x < 0) this.speedX = Math.abs(this.baseSpeedX);
+                if (this.y > canvas.height) this.speedY = -Math.abs(this.baseSpeedY);
+                else if (this.y < 0) this.speedY = Math.abs(this.baseSpeedY);
 
-                this.opacity -= 0.002;
-                if (this.opacity < 0.4) this.opacity = 0.4;
+                // Simple trail effect
+                this.trail.push({ x: this.x, y: this.y, opacity: this.opacity });
+                if (this.trail.length > 5) this.trail.shift();
 
-                this.updatePosition();
+                this.opacity = Math.max(0.3, this.opacity - 0.002);
             }
 
-            updatePosition() {
-                this.element.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.size / 6})`;
-                this.element.style.width = `${this.size}px`;
-                this.element.style.height = `${this.size}px`;
-                this.element.style.opacity = this.opacity;
+            draw() {
+                ctx.save();
+                // Draw trail
+                this.trail.forEach((point, index) => {
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, this.size * 0.6, 0, Math.PI * 2);
+                    ctx.fillStyle = this.isLightTheme ? 
+                        `rgba(50, 0, 0, ${point.opacity * 0.3})` : 
+                        `hsla(${this.hue}, 100%, 50%, ${point.opacity * 0.3})`;
+                    ctx.fill();
+                });
+
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.isLightTheme ? 
+                    `rgba(50, 0, 0, ${this.opacity})` : 
+                    `hsla(${this.hue}, 100%, 50%, ${this.opacity})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.isLightTheme ? 'rgba(0, 0, 0, 0.5)' : `hsla(${this.hue}, 100%, 50%, 0.5)`;
+                ctx.fill();
+                ctx.restore();
             }
 
             updateTheme(isLight) {
                 this.isLightTheme = isLight;
-                this.element.style.background = isLight ? 'radial-gradient(circle, rgba(0, 0, 0, 0.9), transparent)' : 'radial-gradient(circle, rgba(255, 51, 51, 0.9), transparent)';
-                this.element.style.boxShadow = isLight ? '0 0 12px rgba(0, 0, 0, 0.6)' : '0 0 12px rgba(255, 51, 51, 0.6)';
             }
         }
 
@@ -602,15 +626,19 @@
         }
 
         function animateParticles() {
-            particles.forEach(p => p.update());
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
             requestAnimationFrame(animateParticles);
         }
 
         window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
         window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         window.addEventListener('resize', () => {
-            particleContainer.style.width = `${window.innerWidth}px`;
-            particleContainer.style.height = `${window.innerHeight}px`;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             initParticles();
         });
 
