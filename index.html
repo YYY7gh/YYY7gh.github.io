@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Utility</title>
+    <meta name="description" content="xBin - Advanced Roblox exploiting tool with unmatched performance and community support. Join the xBin Team today!">
+    <meta name="keywords" content="Roblox, xBin, Serverside, Exploit, Scripting, Community, Discord">
+    <meta name="author" content="xBin Team">
+    <title>xBin - Unleash Your Power</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/YYY7gh/xBin/refs/heads/main/RobloxStudioBeta_9FWs8R60fs.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             background-color: #0a0a0a;
             color: #fff;
             overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            transition: background-color 0.8s ease, color 0.8s ease;
         }
 
         .background {
@@ -24,256 +33,665 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #1a0505, #2a0808);
-            z-index: -1;
+            background: linear-gradient(135deg, #1a0505, #2a0808, #0a0a0a);
+            z-index: -2;
+            animation: gradientShift 20s ease infinite;
+            filter: blur(2px);
         }
 
-        .particles {
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .particle-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .header-sticky {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 51, 51, 0.2);
+        }
+
+        .header-sticky:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 25px rgba(255, 51, 51, 0.3);
+        }
+
+        .header-sticky .logo {
+            font-size: 2.2rem;
+            color: #ff3333;
+            text-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+        }
+
+        .header-sticky .logo:hover {
+            text-shadow: 0 0 25px rgba(255, 51, 51, 1);
+            transform: scale(1.05);
+        }
+
+        .header-sticky .join-btn {
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .header-sticky .join-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.8);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
             text-align: center;
             margin-bottom: 4rem;
+            position: relative;
         }
 
         .title {
-            font-size: 3rem;
+            font-size: 5.5rem;
             color: #ff3333;
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
-            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.8);
+            animation: glow 1.5s ease-in-out infinite alternate;
         }
 
-        .discord-btn {
-            display: inline-block;
+        .title:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 30px rgba(255, 51, 51, 1);
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 51, 51, 0.5); }
+            to { text-shadow: 0 0 25px rgba(255, 51, 51, 1); }
+        }
+
+        .subtitle {
+            font-size: 1.9rem;
+            color: #ddd;
+            margin-top: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 0.5s;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            border: none;
+            padding: 0.9rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 1.6rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.15) rotate(20deg);
+            box-shadow: 0 8px 25px rgba(255, 51, 51, 0.7);
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            color: #fff;
             padding: 1rem 2rem;
-            background: #7289da;
-            color: white;
+            border-radius: 50px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(255, 51, 51, 0.5);
+            z-index: 1000;
         }
 
-        .discord-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(114, 137, 218, 0.4);
+        .floating-btn:hover {
+            transform: scale(1.08) translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 51, 51, 0.8);
         }
 
         .draggable-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
             margin: 4rem 0;
+            perspective: 1400px;
         }
 
         .draggable {
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(255, 51, 51, 0.2);
             border: 2px solid #ff3333;
-            padding: 1rem;
-            border-radius: 10px;
-            cursor: move;
-            transition: transform 0.3s;
+            padding: 2.5rem;
+            border-radius: 20px;
+            cursor: pointer;
             transform-style: preserve-3d;
             position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            backdrop-filter: blur(8px);
         }
 
-        .draggable img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
+        .draggable::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 51, 51, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .draggable:hover::before {
+            opacity: 1;
         }
 
         .draggable:hover {
-            transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+            transform: scale(1.06) translateZ(30px);
+            background: rgba(255, 51, 51, 0.25);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.7);
         }
 
-        .faq {
-            margin-top: 4rem;
-        }
-
-        .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .faq-question {
-            font-weight: bold;
+        .feature-title {
+            font-size: 2rem;
             color: #ff3333;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
         }
 
-        .faq-answer {
-            display: none;
-            margin-top: 1rem;
-            color: #ccc;
+        .team-section, .why-us, .perks-section, .news-section {
+            margin: 6rem 0;
+            text-align: center;
         }
 
-        .faq-item.active .faq-answer {
-            display: block;
+        .team-section h2, .why-us h2, .perks-section h2, .news-section h2 {
+            font-size: 4rem;
+            color: #ff3333;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.7);
+            margin-bottom: 3.5rem;
+        }
+
+        .team-section h2:hover, .why-us h2:hover, .perks-section h2:hover, .news-section h2:hover {
+            transform: scale(1.04);
+            text-shadow: 0 0 30px rgba(255, 51, 51, 1);
+        }
+
+        .team-grid, .why-us-grid, .perks-grid, .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-item, .why-us-item, .perk-item, .news-item {
+            background: rgba(255, 51, 51, 0.15);
+            border: 2px solid #ff3333;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(60px);
+            backdrop-filter: blur(8px);
+        }
+
+        .team-item.animate, .why-us-item.animate, .perk-item.animate, .news-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-item:hover, .why-us-item:hover, .perk-item:hover, .news-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.6);
+            background: rgba(255, 51, 51, 0.25);
+        }
+
+        .team-item .discord-link {
+            color: #ff3333;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+            animation: glowLink 1.5s ease-in-out infinite alternate;
+        }
+
+        .team-item .discord-link:hover {
+            color: #ff6666;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 1);
+            text-decoration: underline;
+        }
+
+        @keyframes glowLink {
+            from { text-shadow: 0 0 10px rgba(255, 51, 51, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 51, 51, 0.8); }
+        }
+
+        .why-us-item span {
+            font-size: 2.2rem;
+            color: #ff3333;
+            margin-right: 1rem;
+        }
+
+        .why-us-item:hover span {
+            transform: scale(1.15);
+        }
+
+        .news-item h3 {
+            font-size: 1.8rem;
+            color: #ff3333;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff3333, #cc0000);
+            width: 0;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.7);
+        }
+
+        .discord-widget {
+            margin: 6rem auto;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .discord-widget h2 {
+            font-size: 3rem;
+            color: #ff3333;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .discord-widget h2:hover {
+            transform: scale(1.04);
+        }
+
+        .discord-widget p {
+            font-size: 1.3rem;
+            color: #ddd;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .discord-widget iframe {
+            width: 350px;
+            height: 500px;
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(255, 51, 51, 0.5);
+        }
+
+        .discord-widget iframe:hover {
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.7);
+            transform: scale(1.03);
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 4rem; }
+            .subtitle { font-size: 1.5rem; }
+            .header-sticky { flex-direction: column; padding: 1rem; }
+            .floating-btn { padding: 0.8rem 1.5rem; bottom: 15px; }
+            .theme-toggle { bottom: 15px; left: 15px; }
+            .discord-widget iframe { width: 100%; height: 400px; }
+            .draggable-container, .team-grid, .why-us-grid, .perks-grid, .news-grid { grid-template-columns: 1fr; }
+            .team-section h2, .why-us h2, .perks-section h2, .news-section h2 { font-size: 3rem; }
+        }
+
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .light-theme .background {
+            background: linear-gradient(135deg, #ffd700, #ff9999, #f0f0f0);
+        }
+
+        .light-theme .draggable, .light-theme .team-item, .light-theme .why-us-item, .light-theme .perk-item, .light-theme .news-item {
+            background: rgba(255, 51, 51, 0.1);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .light-theme .discord-widget iframe {
+            border: 2px solid #ff3333;
+            box-shadow: 0 5px 25px rgba(255, 51, 51, 0.3);
+        }
+
+        .light-theme .progress-bar {
+            background: #ccc;
+        }
+
+        .light-theme .header-sticky {
+            background: rgba(240, 240, 240, 0.95);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 51, 51, 0.1);
         }
     </style>
 </head>
 <body>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
     <div class="background"></div>
-    <canvas class="particles" id="particles"></canvas>
+    <div class="particle-container" id="particle-container"></div>
+
+    <header class="header-sticky">
+        <div class="logo">xBin</div>
+        <a href="https://raw.githubusercontent.com/YYY7gh/xBin/refs/heads/main/web.lua" class="join-btn" target="_blank" rel="noopener">Get Script</a>
+    </header>
 
     <div class="container">
         <header class="header">
-            <h1 class="title">Roblox Utility</h1>
-            <a href="#" class="discord-btn">Join our Discord</a>
+            <h1 class="title">xBin</h1>
+            <p class="subtitle">Your Ultimate Roblox Exploiting Companion</p>
         </header>
 
         <div class="draggable-container">
-            <div class="draggable" draggable="true">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
-                <h3>Feature 1</h3>
-                <p>Advanced scripting capabilities</p>
+            <div class="draggable" data-feature="1" tabindex="0">
+                <h3 class="feature-title">Server-Side Logs</h3>
+                <p>Unlock deep insights into Roblox servers for ultimate control.</p>
             </div>
-            <div class="draggable" draggable="true">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
-                <h3>Feature 2</h3>
-                <p>Real-time updates</p>
+            <div class="draggable" data-feature="2" tabindex="0">
+                <h3 class="feature-title">3 Unique Execution Methods</h3>
+                <p>Stay undetectable with cutting-edge execution techniques.</p>
             </div>
-            <div class="draggable" draggable="true">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/brave_cFDO0XJYQH-6xW0eA6lRi8Pj8rk4Z4jMfhSz6OuJY.png" alt="Utility Preview">
-                <h3>Feature 3</h3>
-                <p>Custom configurations</p>
+            <div class="draggable" data-feature="3" tabindex="0">
+                <h3 class="feature-title">Custom Configurations</h3>
+                <p>Tailor xBin to your workflow for maximum efficiency.</p>
             </div>
         </div>
 
-        <div class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">How do I install the utility?</div>
-                <div class="faq-answer">Detailed installation instructions will be provided upon joining our Discord server.</div>
+        <section class="team-section">
+            <h2>Meet the xBin Team</h2>
+            <div class="team-grid">
+                <div class="team-item">
+                    <h3>hgftrdfgtAlt</h3>
+                    <p>Lead Developer - Crafting xBin’s core features.</p>
+                </div>
+                <div class="team-item">
+                    <h3>YAMI_friend9</h3>
+                    <p>Beta Tester - Evaluating and refining exploits to enhance usability and performance.</p>
+                </div>
+                <div class="team-item">
+                    <p>Join our <a href="https://discord.gg/feQSfhdDgc" target="_blank" rel="noopener" class="discord-link">Discord</a> to become part of the xBin Team and collaborate with us!</p>
+                </div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question">Is this safe to use?</div>
-                <div class="faq-answer">Yes, our utility is designed with security in mind and regularly updated.</div>
+        </section>
+
+        <section class="why-us">
+            <h2>Why Choose Us?</h2>
+            <div class="why-us-grid">
+                <div class="why-us-item"><p><span>⚡</span>15ms Execution Speed</p></div>
+                <div class="why-us-item"><p><span>🔰</span>3 Unique Methods</p></div>
+                <div class="why-us-item"><p><span>📜</span>Detailed Server Logs</p></div>
+                <div class="why-us-item"><p><span>🧨</span>Auto-Run Capabilities</p></div>
+                <div class="why-us-item"><p><span>💻</span>All-Server Compatibility</p></div>
+                <div class="why-us-item"><p><span>🤫</span>Stealth Mode Guaranteed</p></div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question">What features are included?</div>
-                <div class="faq-answer">Our utility includes advanced scripting, real-time updates, and custom configurations.</div>
+        </section>
+
+        <section class="perks-section">
+            <h2>Exclusive Discord Perks</h2>
+            <div class="perks-grid">
+                <div class="perk-item"><p>Early Feature Access</p></div>
+                <div class="perk-item"><p>Exclusive Scripts</p></div>
+                <div class="perk-item"><p>Live Support</p></div>
+                <div class="perk-item"><p>Team Events</p></div>
             </div>
+        </section>
+
+        <section class="news-section">
+            <h2>Latest News</h2>
+            <div class="news-grid">
+                <div class="news-item">
+                    <h3>New Execution Method</h3>
+                    <p>Released Feb 25, 2025.</p>
+                </div>
+                <div class="news-item">
+                    <h3>New User Interface</h3>
+                    <p>Released Feb 22, 2025.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="discord-widget">
+            <h2>Join Our Community</h2>
+            <p>Connect with the xBin Team on Discord!</p>
+            <iframe src="https://discord.com/widget?id=1336726922092089355&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
     </div>
 
-    <script>
-        // Particle background effect
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <a href="https://discord.gg/feQSfhdDgc" class="floating-btn" target="_blank" rel="noopener">Join Discord Now</a>
+    <button class="theme-toggle">☀️</button>
 
+    <script>
+        // Enhanced Particle System with Trails
+        const particleContainer = document.getElementById('particle-container');
+        const particleCount = Math.min(250, Math.floor(window.innerWidth / 5));
+        const mouse = { x: null, y: null };
         const particles = [];
-        const particleCount = 100;
 
         class Particle {
             constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 3 - 1.5;
-                this.speedY = Math.random() * 3 - 1.5;
+                this.element = document.createElement('div');
+                this.isLightTheme = document.body.classList.contains('light-theme');
+                this.trail = [];
+                Object.assign(this.element.style, {
+                    position: 'absolute',
+                    width: '6px',
+                    height: '6px',
+                    background: this.isLightTheme ? 'radial-gradient(circle, rgba(0, 0, 0, 0.9), transparent)' : 'radial-gradient(circle, rgba(255, 51, 51, 0.9), transparent)',
+                    borderRadius: '50%',
+                    boxShadow: this.isLightTheme ? '0 0 12px rgba(0, 0, 0, 0.6)' : '0 0 12px rgba(255, 51, 51, 0.6)',
+                    willChange: 'transform, opacity',
+                    transition: 'transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease'
+                });
+                particleContainer.appendChild(this.element);
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.speedY = Math.random() * 0.8 - 0.4;
+                this.opacity = Math.random() * 0.6 + 0.4;
+                this.lifespan = Math.random() * 400 + 200;
+                this.age = 0;
+                this.trail = [];
+                this.updatePosition();
             }
 
             update() {
+                this.age++;
+                if (this.age > this.lifespan) {
+                    this.reset();
+                }
+
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const maxDistance = 300;
+
+                    if (distance < maxDistance) {
+                        const force = (maxDistance - distance) / maxDistance;
+                        this.x += (dx / distance || 0) * force * 8;
+                        this.y += (dy / distance || 0) * force * 8;
+                        this.opacity = Math.min(1, this.opacity + force * 0.4);
+                        this.size = Math.min(8, this.size + force * 0.8);
+                    }
+                }
+
+                this.trail.push({ x: this.x, y: this.y, opacity: this.opacity * 0.5 });
+                if (this.trail.length > 10) this.trail.shift();
+
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+                this.x = (this.x > window.innerWidth) ? 0 : (this.x < 0) ? window.innerWidth : this.x;
+                this.y = (this.y > window.innerHeight) ? 0 : (this.y < 0) ? window.innerHeight : this.y;
+
+                this.opacity -= 0.002;
+                if (this.opacity < 0.4) this.opacity = 0.4;
+
+                this.updatePosition();
             }
 
-            draw() {
-                ctx.fillStyle = '#ff3333';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+            updatePosition() {
+                this.element.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.size / 6})`;
+                this.element.style.width = `${this.size}px`;
+                this.element.style.height = `${this.size}px`;
+                this.element.style.opacity = this.opacity;
+            }
+
+            updateTheme(isLight) {
+                this.isLightTheme = isLight;
+                this.element.style.background = isLight ? 'radial-gradient(circle, rgba(0, 0, 0, 0.9), transparent)' : 'radial-gradient(circle, rgba(255, 51, 51, 0.9), transparent)';
+                this.element.style.boxShadow = isLight ? '0 0 12px rgba(0, 0, 0, 0.6)' : '0 0 12px rgba(255, 51, 51, 0.6)';
             }
         }
 
-        function init() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
+        function initParticles() {
+            particles.length = 0;
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (const particle of particles) {
-                particle.update();
-                particle.draw();
-            }
-            
-            requestAnimationFrame(animate);
+        function animateParticles() {
+            particles.forEach(p => p.update());
+            requestAnimationFrame(animateParticles);
         }
 
-        init();
-        animate();
-
-        // Draggable functionality
-        const draggables = document.querySelectorAll('.draggable');
-        
-        draggables.forEach(draggable => {
-            draggable.addEventListener('dragstart', (e) => {
-                draggable.classList.add('dragging');
-            });
-
-            draggable.addEventListener('dragend', (e) => {
-                draggable.classList.remove('dragging');
-            });
-        });
-
-        // FAQ functionality
-        const faqItems = document.querySelectorAll('.faq-item');
-        
-        faqItems.forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('active');
-            });
-        });
-
-        // 3D effect on mouse move
-        document.addEventListener('mousemove', (e) => {
-            const { clientX, clientY } = e;
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            
-            draggables.forEach(draggable => {
-                const rotateY = (clientX - centerX) / 50;
-                const rotateX = (centerY - clientY) / 50;
-                
-                draggable.style.transform = `
-                    perspective(1000px)
-                    rotateX(${rotateX}deg)
-                    rotateY(${rotateY}deg)
-                    translateZ(20px)
-                `;
-            });
-        });
-
-        // Responsive canvas resize
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            particleContainer.style.width = `${window.innerWidth}px`;
+            particleContainer.style.height = `${window.innerHeight}px`;
+            initParticles();
+        });
+
+        initParticles();
+        animateParticles();
+
+        // Feature Cards with Enhanced Tilt
+        const features = document.querySelectorAll('.draggable');
+        const tiltStates = new Map();
+
+        features.forEach(feature => {
+            tiltStates.set(feature, { currentX: 0, currentY: 0 });
+            feature.addEventListener('mouseenter', () => {
+                feature.style.transition = 'all 0.1s ease';
+            });
+            feature.addEventListener('mouseleave', () => {
+                feature.style.transition = 'all 0.4s ease';
+            });
+        });
+
+        function updateTilt(timestamp) {
+            features.forEach(feature => {
+                const rect = feature.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const state = tiltStates.get(feature);
+                let targetX = mouse.x ? (mouse.x - centerX) / 35 : 0;
+                let targetY = mouse.y ? (centerY - mouse.y) / 35 : 0;
+
+                targetX = Math.max(Math.min(targetX, 25), -25);
+                targetY = Math.max(Math.min(targetY, 25), -25);
+
+                state.currentX += (targetX - state.currentX) * 0.25;
+                state.currentY += (targetY - state.currentY) * 0.25;
+
+                feature.style.transform = `perspective(1400px) rotateX(${state.currentY}deg) rotateY(${state.currentX}deg)`;
+            });
+            requestAnimationFrame(updateTilt);
+        }
+
+        requestAnimationFrame(updateTilt);
+
+        // Intersection Observer for Smooth Animations
+        const animatedItems = document.querySelectorAll('.team-item, .why-us-item, .perk-item, .news-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate');
+                    }, index * 80);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        animatedItems.forEach(item => observer.observe(item));
+
+        // Theme Toggle with Particle Color Change
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.textContent = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+            const isLight = document.body.classList.contains('light-theme');
+            particles.forEach(p => p.updateTheme(isLight));
+        });
+
+        // Progress Bar
+        const progressFill = document.querySelector('.progress-fill');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressFill.style.width = `${scrollPercent}%`;
+        });
+
+        // Preload Animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '1';
+            }, 100);
         });
     </script>
 </body>
